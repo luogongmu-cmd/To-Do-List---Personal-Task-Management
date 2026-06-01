@@ -13,7 +13,8 @@ import {
 import { useSettingsStore } from '@/store/settings-store'
 import { useTaskStore } from '@/store/task-store'
 import { TagManager } from '@/components/tag-manager'
-import { Moon, Sun, Download, Trash2 } from 'lucide-react'
+import { Moon, Sun, Download, Upload, Trash2 } from 'lucide-react'
+import { storage } from '@/lib/storage'
 
 export default function SettingsPage() {
   const { theme, defaultView, setTheme, setDefaultView } = useSettingsStore()
@@ -59,10 +60,13 @@ export default function SettingsPage() {
         try {
           const data = JSON.parse(event.target?.result as string)
           if (data.tasks) {
-            localStorage.setItem('todo-app-tasks', JSON.stringify(data.tasks))
+            storage.setTasks(data.tasks)
           }
           if (data.tags) {
-            localStorage.setItem('todo-app-tags', JSON.stringify(data.tags))
+            storage.setTags(data.tags)
+          }
+          if (data.settings) {
+            storage.setSettings(data.settings)
           }
           alert('数据导入成功，页面将刷新')
           window.location.reload()
@@ -77,7 +81,9 @@ export default function SettingsPage() {
 
   const handleClearData = () => {
     if (confirm('确定要清除所有数据吗？此操作不可恢复。')) {
-      localStorage.clear()
+      localStorage.removeItem('todo-app-tasks')
+      localStorage.removeItem('todo-app-tags')
+      localStorage.removeItem('todo-app-settings')
       window.location.reload()
     }
   }
@@ -160,7 +166,7 @@ export default function SettingsPage() {
               <p className="text-sm text-gray-500">从 JSON 文件导入数据</p>
             </div>
             <Button variant="outline" onClick={handleImportData}>
-              <Download className="mr-2 h-4 w-4" />
+              <Upload className="mr-2 h-4 w-4" />
               导入
             </Button>
           </div>
