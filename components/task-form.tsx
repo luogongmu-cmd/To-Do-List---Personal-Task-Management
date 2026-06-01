@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -22,6 +22,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
 import { Task, TaskPriority, TaskStatus } from '@/types'
 import { useTaskStore } from '@/store/task-store'
 
@@ -44,6 +45,8 @@ interface TaskFormProps {
 export function TaskForm({ task, open, onClose }: TaskFormProps) {
   const addTask = useTaskStore((state) => state.addTask)
   const updateTask = useTaskStore((state) => state.updateTask)
+  const tags = useTaskStore((state) => state.tags)
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
 
   const {
     register,
@@ -84,6 +87,7 @@ export function TaskForm({ task, open, onClose }: TaskFormProps) {
               })()
             : '',
         })
+        setSelectedTags(task.tags.map(t => t.id))
       } else {
         reset({
           title: '',
@@ -92,21 +96,33 @@ export function TaskForm({ task, open, onClose }: TaskFormProps) {
           priority: 'medium',
           dueDate: '',
         })
+        setSelectedTags([])
       }
     }
   }, [task, open, reset])
 
+  const toggleTag = (tagId: string) => {
+    setSelectedTags(prev =>
+      prev.includes(tagId)
+        ? prev.filter(id => id !== tagId)
+        : [...prev, tagId]
+    )
+  }
+
   const onSubmit = (data: TaskFormData) => {
+    const taskTags = tags.filter(tag => selectedTags.includes(tag.id))
+
     if (task) {
       updateTask(task.id, {
         ...data,
         dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
+        tags: taskTags,
       })
     } else {
       addTask({
         ...data,
         dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
-        tags: [],
+        tags: taskTags,
       })
     }
     onClose()
@@ -185,6 +201,26 @@ export function TaskForm({ task, open, onClose }: TaskFormProps) {
           <div className="space-y-2">
             <Label htmlFor="dueDate">截止日期</Label>
             <Input id="dueDate" type="date" {...register('dueDate')} />
+          </div>
+
+          <div className="space-y-2">
+            <Label>标签</Label>
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => {
+                const isSelected = selectedTags.includes(tag.id)
+                return (
+                  <Badge
+                    key={tag.id}
+                    variant={isSelected ? 'default' : 'outline'}
+                    className="cursor-pointer"
+                    style={isSelected ? { backgroundColor: tag.color } : { borderColor: tag.color, color: tag.color }}
+                    onClick={() => toggleTag(tag.id)}
+                  >
+                    {tag.name}
+                  </Badge>
+                )
+              })}
+            </div>
           </div>
 
           <DialogFooter>
