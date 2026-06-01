@@ -37,7 +37,7 @@ export function Sidebar({ onClose }: SidebarProps) {
         <h1 className="text-2xl font-bold text-gray-900">Todo App</h1>
       </div>
 
-      <Link href="/" onClick={handleNavClick} className="inline-flex items-center justify-center w-full mb-6 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors">
+      <Link href="/" onClick={handleNavClick} aria-label="新建任务" className="inline-flex items-center justify-center w-full mb-6 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors">
         <Plus className="mr-2 h-4 w-4" />
         新建任务
       </Link>

@@ -59,6 +59,7 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
         checked={task.status === 'done'}
         onCheckedChange={handleStatusChange}
         className="mt-1"
+        aria-label={`标记 ${task.title} 为${task.status === 'done' ? '未完成' : '已完成'}`}
       />
 
       <div className="flex-1 min-w-0">
@@ -103,7 +104,7 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
 
       <DropdownMenu>
         <DropdownMenuTrigger
-          render={<Button variant="ghost" size="icon-sm" className="h-8 w-8" />}
+          render={<Button variant="ghost" size="icon-sm" className="h-8 w-8" aria-label="更多操作" />}
         >
           <MoreHorizontal className="h-4 w-4" />
         </DropdownMenuTrigger>

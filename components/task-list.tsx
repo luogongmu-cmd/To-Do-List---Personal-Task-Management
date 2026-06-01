@@ -44,6 +44,7 @@ export function TaskList() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
             placeholder="搜索任务..."
+            aria-label="搜索任务"
             value={filter.search || ''}
             onChange={(e) =>
               setFilter({ search: (e.target as HTMLInputElement).value })

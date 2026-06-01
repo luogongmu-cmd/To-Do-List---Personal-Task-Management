@@ -142,6 +142,7 @@ export function TaskForm({ task, open, onClose }: TaskFormProps) {
               id="title"
               {...register('title')}
               placeholder="输入任务标题"
+              aria-required="true"
             />
             {errors.title && (
               <p className="text-sm text-red-500">{errors.title.message}</p>
