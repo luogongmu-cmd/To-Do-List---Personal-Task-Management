@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar'
 import { format, parse, startOfWeek, getDay } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
@@ -22,7 +22,6 @@ const localizer = dateFnsLocalizer({
 
 export function CalendarView() {
   const tasks = useTaskStore((state) => state.tasks)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const events = useMemo(() => {
     return tasks
@@ -31,19 +30,10 @@ export function CalendarView() {
         id: task.id,
         title: task.title,
         start: new Date(task.dueDate!),
-        end: new Date(task.dueDate!),
+        end: new Date(new Date(task.dueDate!).getTime() + 60 * 60 * 1000), // +1 hour
         resource: task,
       }))
   }, [tasks])
-
-  const handleSelectEvent = (event: any) => {
-    // 可以打开任务详情
-    console.log('Selected task:', event.resource)
-  }
-
-  const handleSelectSlot = (slotInfo: { start: Date }) => {
-    setSelectedDate(slotInfo.start)
-  }
 
   return (
     <div className="bg-white rounded-lg border p-4">
@@ -94,9 +84,6 @@ export function CalendarView() {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 600 }}
-        onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelectSlot}
-        selectable
         views={[Views.MONTH, Views.WEEK, Views.DAY]}
         defaultView={Views.MONTH}
         messages={{
