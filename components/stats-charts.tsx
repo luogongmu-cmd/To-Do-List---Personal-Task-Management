@@ -95,6 +95,13 @@ export function StatsCharts() {
     return Math.round((tasks.filter((t) => t.status === 'done').length / tasks.length) * 100)
   }, [tasks])
 
+  // 任务状态分布
+  const statusCounts = useMemo(() => ({
+    todo: tasks.filter((t) => t.status === 'todo').length,
+    inProgress: tasks.filter((t) => t.status === 'in_progress').length,
+    done: tasks.filter((t) => t.status === 'done').length,
+  }), [tasks])
+
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {/* 统计卡片 */}
@@ -110,11 +117,11 @@ export function StatsCharts() {
             </div>
             <div>
               <p className="text-3xl font-bold text-green-600">{completionStats.week}</p>
-              <p className="text-sm text-gray-500">本周完成</p>
+              <p className="text-sm text-gray-500">近7天完成</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-purple-600">{completionStats.month}</p>
-              <p className="text-sm text-gray-500">本月完成</p>
+              <p className="text-sm text-gray-500">近30天完成</p>
             </div>
           </div>
           <div className="mt-4 text-center">
@@ -190,12 +197,12 @@ export function StatsCharts() {
                   <div
                     className="bg-blue-600 h-2 rounded-full"
                     style={{
-                      width: `${tasks.length > 0 ? (tasks.filter((t) => t.status === 'todo').length / tasks.length) * 100 : 0}%`,
+                      width: `${tasks.length > 0 ? (statusCounts.todo / tasks.length) * 100 : 0}%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium">
-                  {tasks.filter((t) => t.status === 'todo').length}
+                  {statusCounts.todo}
                 </span>
               </div>
             </div>
@@ -206,12 +213,12 @@ export function StatsCharts() {
                   <div
                     className="bg-yellow-500 h-2 rounded-full"
                     style={{
-                      width: `${tasks.length > 0 ? (tasks.filter((t) => t.status === 'in_progress').length / tasks.length) * 100 : 0}%`,
+                      width: `${tasks.length > 0 ? (statusCounts.inProgress / tasks.length) * 100 : 0}%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium">
-                  {tasks.filter((t) => t.status === 'in_progress').length}
+                  {statusCounts.inProgress}
                 </span>
               </div>
             </div>
@@ -222,12 +229,12 @@ export function StatsCharts() {
                   <div
                     className="bg-green-500 h-2 rounded-full"
                     style={{
-                      width: `${tasks.length > 0 ? (tasks.filter((t) => t.status === 'done').length / tasks.length) * 100 : 0}%`,
+                      width: `${tasks.length > 0 ? (statusCounts.done / tasks.length) * 100 : 0}%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium">
-                  {tasks.filter((t) => t.status === 'done').length}
+                  {statusCounts.done}
                 </span>
               </div>
             </div>
