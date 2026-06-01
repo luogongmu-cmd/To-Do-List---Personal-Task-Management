@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
 import { TaskItem } from './task-item'
 import { TaskForm } from './task-form'
+import { TaskListSkeleton } from './task-skeleton'
 import { Task, TaskStatus } from '@/types'
 import { useTaskStore } from '@/store/task-store'
 
@@ -21,6 +22,7 @@ export function TaskList() {
 
   const filter = useTaskStore((state) => state.filter)
   const sort = useTaskStore((state) => state.sort)
+  const isLoading = useTaskStore((state) => state.isLoading)
   const setFilter = useTaskStore((state) => state.setFilter)
   const setSort = useTaskStore((state) => state.setSort)
   const getFilteredTasks = useTaskStore((state) => state.getFilteredTasks)
@@ -35,6 +37,10 @@ export function TaskList() {
   const handleCloseForm = () => {
     setEditingTask(null)
     setFormOpen(false)
+  }
+
+  if (isLoading) {
+    return <TaskListSkeleton count={5} />
   }
 
   return (

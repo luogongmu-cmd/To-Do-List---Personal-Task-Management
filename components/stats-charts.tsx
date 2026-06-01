@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   LineChart,
   Line,
@@ -22,6 +23,20 @@ const COLORS = ['#3b82f6', '#f59e0b', '#ef4444']
 
 export function StatsCharts() {
   const tasks = useTaskStore((state) => state.tasks)
+  const isLoading = useTaskStore((state) => state.isLoading)
+
+  if (isLoading) {
+    return (
+      <div className="grid gap-6 md:grid-cols-2">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-lg border border-border p-6">
+            <Skeleton className="h-6 w-32 mb-4" />
+            <Skeleton className="h-48 w-full" />
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   // 今日/本周/本月完成数
   const completionStats = useMemo(() => {

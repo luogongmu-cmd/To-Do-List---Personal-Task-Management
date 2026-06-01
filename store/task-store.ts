@@ -7,6 +7,7 @@ interface TaskState {
   tags: Tag[]
   filter: TaskFilter
   sort: TaskSort
+  isLoading: boolean
 
   // Actions
   loadTasks: () => void
@@ -34,10 +35,12 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   tags: [],
   filter: { status: 'all' },
   sort: { field: 'order', direction: 'asc' },
+  isLoading: true,
 
   loadTasks: () => {
+    set({ isLoading: true })
     const tasks = storage.getTasks()
-    set({ tasks })
+    set({ tasks, isLoading: false })
   },
 
   addTask: (taskData) => {
