@@ -128,3 +128,29 @@
     @apply font-sans;
   }
 }
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* 移动端优化 */
+@media (max-width: 1024px) {
+  .react-big-calendar {
+    font-size: 12px;
+  }
+}
