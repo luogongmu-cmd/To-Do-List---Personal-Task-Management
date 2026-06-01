@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -10,6 +11,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { useSettingsStore } from '@/store/settings-store'
 import { useTaskStore } from '@/store/task-store'
 import { TagManager } from '@/components/tag-manager'
@@ -80,12 +92,10 @@ export default function SettingsPage() {
   }
 
   const handleClearData = () => {
-    if (confirm('确定要清除所有数据吗？此操作不可恢复。')) {
-      localStorage.removeItem('todo-app-tasks')
-      localStorage.removeItem('todo-app-tags')
-      localStorage.removeItem('todo-app-settings')
-      window.location.reload()
-    }
+    localStorage.removeItem('todo-app-tasks')
+    localStorage.removeItem('todo-app-tags')
+    localStorage.removeItem('todo-app-settings')
+    window.location.reload()
   }
 
   return (
@@ -176,10 +186,33 @@ export default function SettingsPage() {
               <p className="font-medium">清除数据</p>
               <p className="text-sm text-gray-500">清除所有本地数据</p>
             </div>
-            <Button variant="destructive" onClick={handleClearData}>
-              <Trash2 className="mr-2 h-4 w-4" />
-              清除
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger
+                render={
+                  <Button variant="destructive">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    清除
+                  </Button>
+                }
+              />
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>确定要清除所有数据？</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    此操作不可恢复。所有任务、标签和设置将被永久删除。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>取消</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleClearData}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    清除
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </CardContent>
       </Card>

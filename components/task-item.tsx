@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -11,6 +12,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { MoreHorizontal, Pencil, Trash2, Calendar } from 'lucide-react'
 import { Task, TaskStatus } from '@/types'
 import { useTaskStore } from '@/store/task-store'
@@ -36,16 +48,11 @@ const priorityLabels = {
 export function TaskItem({ task, onEdit }: TaskItemProps) {
   const updateTask = useTaskStore((state) => state.updateTask)
   const deleteTask = useTaskStore((state) => state.deleteTask)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   const handleStatusChange = (checked: boolean) => {
     const newStatus: TaskStatus = checked ? 'done' : 'todo'
     updateTask(task.id, { status: newStatus })
-  }
-
-  const handleDelete = () => {
-    if (confirm('确定删除这个任务吗？')) {
-      deleteTask(task.id)
-    }
   }
 
   return (
@@ -113,9 +120,34 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
             <Pencil className="mr-2 h-4 w-4" />
             编辑
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleDelete} variant="destructive">
-            <Trash2 className="mr-2 h-4 w-4" />
-            删除
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()} variant="destructive">
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+              <AlertDialogTrigger
+                render={
+                  <button className="flex w-full items-center">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    删除
+                  </button>
+                }
+              />
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>确定删除任务？</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    此操作无法撤销。任务 "{task.title}" 将被永久删除。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>取消</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => deleteTask(task.id)}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    删除
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -11,6 +11,16 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
 import { Tag } from '@/types'
 import { useTaskStore } from '@/store/task-store'
@@ -31,6 +41,8 @@ export function TagManager() {
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
   const [name, setName] = useState('')
   const [color, setColor] = useState(presetColors[0])
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [tagToDelete, setTagToDelete] = useState<Tag | null>(null)
 
   const handleOpen = (tag?: Tag) => {
     if (tag) {
@@ -56,9 +68,15 @@ export function TagManager() {
     setOpen(false)
   }
 
-  const handleDelete = (id: string) => {
-    if (confirm('确定删除这个标签吗？')) {
-      deleteTag(id)
+  const handleDeleteClick = (tag: Tag) => {
+    setTagToDelete(tag)
+    setDeleteDialogOpen(true)
+  }
+
+  const handleConfirmDelete = () => {
+    if (tagToDelete) {
+      deleteTag(tagToDelete.id)
+      setTagToDelete(null)
     }
   }
 
@@ -96,7 +114,7 @@ export function TagManager() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => handleDelete(tag.id)}
+                onClick={() => handleDeleteClick(tag)}
               >
                 <Trash2 className="h-4 w-4 text-red-500" />
               </Button>
@@ -156,6 +174,26 @@ export function TagManager() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>确定删除标签？</AlertDialogTitle>
+            <AlertDialogDescription>
+              此操作无法撤销。标签 "{tagToDelete?.name}" 将被永久删除。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              删除
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
