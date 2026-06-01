@@ -6,11 +6,9 @@ import {
   ListTodo,
   Calendar,
   BarChart3,
-  Tags,
   Settings,
   Plus
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useTaskStore } from '@/store/task-store'
 
@@ -28,20 +26,6 @@ interface SidebarProps {
 export function Sidebar({ onClose }: SidebarProps) {
   const pathname = usePathname()
   const tags = useTaskStore((state) => state.tags)
-  const addTask = useTaskStore((state) => state.addTask)
-
-  const handleQuickAdd = () => {
-    const title = prompt('输入任务标题:')
-    if (title) {
-      addTask({
-        title,
-        status: 'todo',
-        priority: 'medium',
-        tags: [],
-      })
-    }
-    onClose?.()
-  }
 
   const handleNavClick = () => {
     onClose?.()
@@ -53,10 +37,10 @@ export function Sidebar({ onClose }: SidebarProps) {
         <h1 className="text-2xl font-bold text-gray-900">Todo App</h1>
       </div>
 
-      <Button onClick={handleQuickAdd} className="w-full mb-6">
+      <Link href="/" onClick={handleNavClick} className="inline-flex items-center justify-center w-full mb-6 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors">
         <Plus className="mr-2 h-4 w-4" />
         新建任务
-      </Button>
+      </Link>
 
       <nav className="space-y-1">
         {navItems.map((item) => {

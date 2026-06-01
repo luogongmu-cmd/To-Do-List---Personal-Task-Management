@@ -1,14 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Inter } from 'next/font/google'
 import { Sidebar } from '@/components/sidebar'
 import { useTaskStore } from '@/store/task-store'
 import { useSettingsStore } from '@/store/settings-store'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export default function MainLayout({
   children,
@@ -27,7 +24,7 @@ export default function MainLayout({
   }, [loadTasks, loadTags, loadSettings])
 
   return (
-    <div className={`min-h-screen bg-gray-50 ${inter.className}`}>
+    <div className="min-h-screen bg-gray-50">
       {/* 移动端菜单按钮 */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <Button
