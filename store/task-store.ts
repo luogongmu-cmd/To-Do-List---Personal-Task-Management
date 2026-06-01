@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { Task, TaskFilter, TaskSort, Tag } from '@/types'
 import { storage } from '@/lib/storage'
+import { toast } from 'sonner'
 
 interface TaskState {
   tasks: Task[]
@@ -8,12 +9,15 @@ interface TaskState {
   filter: TaskFilter
   sort: TaskSort
   isLoading: boolean
+  deletedTask: Task | null
+  undoTimeout: ReturnType<typeof setTimeout> | null
 
   // Actions
   loadTasks: () => void
   addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'order'>) => void
   updateTask: (id: string, updates: Partial<Task>) => void
   deleteTask: (id: string) => void
+  undoDelete: () => void
   reorderTasks: (tasks: Task[]) => void
 
   // Tag actions
@@ -36,6 +40,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   filter: { status: 'all' },
   sort: { field: 'order', direction: 'asc' },
   isLoading: true,
+  deletedTask: null,
+  undoTimeout: null,
 
   loadTasks: () => {
     set({ isLoading: true })
@@ -68,9 +74,61 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   },
 
   deleteTask: (id) => {
-    const tasks = get().tasks.filter((task) => task.id !== id)
-    storage.setTasks(tasks)
-    set({ tasks })
+    const { tasks, undoTimeout } = get()
+
+    // Clear existing timeout if any
+    if (undoTimeout) {
+      clearTimeout(undoTimeout)
+    }
+
+    const taskToDelete = tasks.find(t => t.id === id)
+    if (!taskToDelete) return
+
+    const updatedTasks = tasks.filter((task) => task.id !== id)
+    storage.setTasks(updatedTasks)
+    set({
+      tasks: updatedTasks,
+      deletedTask: taskToDelete,
+      undoTimeout: null
+    })
+
+    // Show toast with undo button
+    toast.success('任务已删除', {
+      action: {
+        label: '撤销',
+        onClick: () => get().undoDelete()
+      },
+      duration: 5000
+    })
+
+    // Auto-clear deleted task after 5 seconds
+    const timeout = setTimeout(() => {
+      set({ deletedTask: null })
+    }, 5000)
+    set({ undoTimeout: timeout })
+  },
+
+  undoDelete: () => {
+    const { deletedTask, undoTimeout, tasks } = get()
+
+    if (!deletedTask) return
+
+    // Clear timeout
+    if (undoTimeout) {
+      clearTimeout(undoTimeout)
+    }
+
+    // Restore task
+    const updatedTasks = [...tasks, deletedTask].sort((a, b) => a.order - b.order)
+    storage.setTasks(updatedTasks)
+    set({
+      tasks: updatedTasks,
+      deletedTask: null,
+      undoTimeout: null
+    })
+
+    // Show success toast
+    toast.success('任务已恢复')
   },
 
   reorderTasks: (reorderedTasks) => {
