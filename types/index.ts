@@ -7,11 +7,11 @@ export interface Task {
   description?: string
   status: TaskStatus
   priority: TaskPriority
-  dueDate?: string
-  reminderAt?: string
+  dueDate?: Date
+  reminderAt?: Date
   order: number
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   userId?: string
   tags: Tag[]
 }
@@ -26,6 +26,8 @@ export interface User {
   id: string
   email: string
   name?: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface TaskFilter {
