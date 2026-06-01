@@ -36,17 +36,21 @@ export function CalendarView() {
   }, [tasks])
 
   return (
-    <div className="bg-white rounded-lg border p-4">
+    <div className="bg-card rounded-lg border border-border p-4">
       <style jsx global>{`
         .rbc-calendar {
           font-family: inherit;
+          color: var(--foreground);
         }
         .rbc-header {
           padding: 8px 0;
           font-weight: 600;
         }
         .rbc-today {
-          background-color: #f0f9ff;
+          background-color: oklch(0.95 0.02 250);
+        }
+        .dark .rbc-today {
+          background-color: oklch(0.25 0.02 250);
         }
         .rbc-event {
           border-radius: 4px;
@@ -57,25 +61,41 @@ export function CalendarView() {
           margin-bottom: 16px;
         }
         .rbc-toolbar button {
-          color: #374151;
-          border: 1px solid #d1d5db;
-          background: white;
+          color: var(--foreground);
+          border: 1px solid var(--border);
+          background: var(--background);
           padding: 6px 12px;
           border-radius: 6px;
           font-size: 14px;
         }
         .rbc-toolbar button:hover {
-          background: #f3f4f6;
+          background: var(--muted);
         }
         .rbc-toolbar button.rbc-active {
-          background: #111827;
-          color: white;
-          border-color: #111827;
+          background: var(--primary);
+          color: var(--primary-foreground);
+          border-color: var(--primary);
         }
         .rbc-month-view, .rbc-week-view, .rbc-day-view {
-          border: 1px solid #e5e7eb;
+          border: 1px solid var(--border);
           border-radius: 8px;
           overflow: hidden;
+        }
+        .rbc-day-bg {
+          border-color: var(--border);
+        }
+        .rbc-month-row + .rbc-month-row {
+          border-color: var(--border);
+        }
+        .rbc-off-range-bg {
+          background: var(--muted);
+        }
+        .rbc-date-cell {
+          color: var(--muted-foreground);
+        }
+        .rbc-off-range {
+          color: var(--muted-foreground);
+          opacity: 0.5;
         }
       `}</style>
       <Calendar

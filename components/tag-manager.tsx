@@ -94,7 +94,7 @@ export function TagManager() {
         {tags.map((tag) => (
           <div
             key={tag.id}
-            className="flex items-center justify-between p-3 bg-white rounded-lg border"
+            className="flex items-center justify-between p-3 bg-card rounded-lg border border-border"
           >
             <div className="flex items-center gap-3">
               <div
@@ -116,14 +116,14 @@ export function TagManager() {
                 size="sm"
                 onClick={() => handleDeleteClick(tag)}
               >
-                <Trash2 className="h-4 w-4 text-red-500" />
+                <Trash2 className="h-4 w-4 text-destructive" />
               </Button>
             </div>
           </div>
         ))}
 
         {tags.length === 0 && (
-          <p className="text-center py-8 text-gray-500">
+          <p className="text-center py-8 text-muted-foreground">
             暂无标签，点击上方按钮创建
           </p>
         )}
@@ -154,7 +154,7 @@ export function TagManager() {
                   <button
                     key={c}
                     className={`w-8 h-8 rounded-full border-2 transition-all ${
-                      color === c ? 'border-gray-900 scale-110' : 'border-transparent'
+                      color === c ? 'border-primary scale-110' : 'border-transparent'
                     }`}
                     style={{ backgroundColor: c }}
                     onClick={() => setColor(c)}
@@ -187,7 +187,7 @@ export function TagManager() {
             <AlertDialogCancel>取消</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmDelete}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
             >
               删除
             </AlertDialogAction>

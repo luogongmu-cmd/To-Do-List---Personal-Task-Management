@@ -145,12 +145,20 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: oklch(0.75 0 0);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: oklch(0.55 0 0);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: oklch(0.4 0 0);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.55 0 0);
 }
 
 /* 移动端优化 */

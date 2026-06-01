@@ -41,7 +41,7 @@ export function TaskList() {
     <div>
       <div className="flex items-center gap-4 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             placeholder="搜索任务..."
             aria-label="搜索任务"
@@ -89,7 +89,7 @@ export function TaskList() {
 
       <div className="space-y-3">
         {tasks.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-muted-foreground">
             <p className="text-lg">暂无任务</p>
             <p className="text-sm">点击侧边栏的&quot;新建任务&quot;开始添加</p>
           </div>

@@ -113,20 +113,20 @@ export function StatsCharts() {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-3xl font-bold text-blue-600">{completionStats.today}</p>
-              <p className="text-sm text-gray-500">今日完成</p>
+              <p className="text-sm text-muted-foreground">今日完成</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-green-600">{completionStats.week}</p>
-              <p className="text-sm text-gray-500">近7天完成</p>
+              <p className="text-sm text-muted-foreground">近7天完成</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-purple-600">{completionStats.month}</p>
-              <p className="text-sm text-gray-500">近30天完成</p>
+              <p className="text-sm text-muted-foreground">近30天完成</p>
             </div>
           </div>
           <div className="mt-4 text-center">
             <p className="text-4xl font-bold">{completionRate}%</p>
-            <p className="text-sm text-gray-500">总完成率</p>
+            <p className="text-sm text-muted-foreground">总完成率</p>
           </div>
         </CardContent>
       </Card>
@@ -191,9 +191,9 @@ export function StatsCharts() {
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-500">待办</span>
+              <span className="text-sm text-muted-foreground">待办</span>
               <div className="flex items-center gap-2">
-                <div className="w-32 bg-gray-200 rounded-full h-2">
+                <div className="w-32 bg-muted rounded-full h-2">
                   <div
                     className="bg-blue-600 h-2 rounded-full"
                     style={{
@@ -207,9 +207,9 @@ export function StatsCharts() {
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-500">进行中</span>
+              <span className="text-sm text-muted-foreground">进行中</span>
               <div className="flex items-center gap-2">
-                <div className="w-32 bg-gray-200 rounded-full h-2">
+                <div className="w-32 bg-muted rounded-full h-2">
                   <div
                     className="bg-yellow-500 h-2 rounded-full"
                     style={{
@@ -223,9 +223,9 @@ export function StatsCharts() {
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-500">已完成</span>
+              <span className="text-sm text-muted-foreground">已完成</span>
               <div className="flex items-center gap-2">
-                <div className="w-32 bg-gray-200 rounded-full h-2">
+                <div className="w-32 bg-muted rounded-full h-2">
                   <div
                     className="bg-green-500 h-2 rounded-full"
                     style={{

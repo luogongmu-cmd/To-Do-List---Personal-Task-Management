@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -27,10 +26,12 @@ import { useTaskStore } from '@/store/task-store'
 import { TagManager } from '@/components/tag-manager'
 import { Moon, Sun, Download, Upload, Trash2 } from 'lucide-react'
 import { storage } from '@/lib/storage'
+import { useTheme } from 'next-themes'
 
 export default function SettingsPage() {
-  const { theme, defaultView, setTheme, setDefaultView } = useSettingsStore()
+  const { defaultView, setDefaultView } = useSettingsStore()
   const tasks = useTaskStore((state) => state.tasks)
+  const { theme, setTheme } = useTheme()
 
   const handleThemeChange = (value: string | null) => {
     if (value === 'light' || value === 'dark') {
@@ -100,7 +101,7 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">设置</h2>
+      <h2 className="text-2xl font-bold text-foreground">设置</h2>
 
       <Card>
         <CardHeader>
@@ -162,7 +163,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">导出数据</p>
-              <p className="text-sm text-gray-500">导出所有任务和设置为 JSON 文件</p>
+              <p className="text-sm text-muted-foreground">导出所有任务和设置为 JSON 文件</p>
             </div>
             <Button variant="outline" onClick={handleExportData}>
               <Download className="mr-2 h-4 w-4" />
@@ -173,7 +174,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">导入数据</p>
-              <p className="text-sm text-gray-500">从 JSON 文件导入数据</p>
+              <p className="text-sm text-muted-foreground">从 JSON 文件导入数据</p>
             </div>
             <Button variant="outline" onClick={handleImportData}>
               <Upload className="mr-2 h-4 w-4" />
@@ -184,7 +185,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">清除数据</p>
-              <p className="text-sm text-gray-500">清除所有本地数据</p>
+              <p className="text-sm text-muted-foreground">清除所有本地数据</p>
             </div>
             <AlertDialog>
               <AlertDialogTrigger
@@ -206,7 +207,7 @@ export default function SettingsPage() {
                   <AlertDialogCancel>取消</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleClearData}
-                    className="bg-red-600 hover:bg-red-700"
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
                   >
                     清除
                   </AlertDialogAction>

@@ -34,9 +34,9 @@ interface TaskItemProps {
 }
 
 const priorityColors = {
-  low: 'bg-blue-100 text-blue-800',
-  medium: 'bg-yellow-100 text-yellow-800',
-  high: 'bg-red-100 text-red-800',
+  low: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
+  medium: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',
+  high: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',
 }
 
 const priorityLabels = {
@@ -58,7 +58,7 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
   return (
     <div
       className={cn(
-        'flex items-start gap-3 p-4 bg-white rounded-lg border border-gray-200 transition-all hover:shadow-md',
+        'flex items-start gap-3 p-4 bg-card rounded-lg border border-border transition-all hover:shadow-md',
         task.status === 'done' && 'opacity-60'
       )}
     >
@@ -73,7 +73,7 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
         <div className="flex items-center gap-2 mb-1">
           <h3
             className={cn(
-              'text-sm font-medium text-gray-900',
+              'text-sm font-medium text-foreground',
               task.status === 'done' && 'line-through'
             )}
           >
@@ -85,14 +85,14 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
         </div>
 
         {task.description && (
-          <p className="text-sm text-gray-500 mb-2 line-clamp-2">
+          <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
             {task.description}
           </p>
         )}
 
         <div className="flex items-center gap-2 flex-wrap">
           {task.dueDate && (
-            <div className="flex items-center text-xs text-gray-500">
+            <div className="flex items-center text-xs text-muted-foreground">
               <Calendar className="mr-1 h-3 w-3" />
               {format(new Date(task.dueDate), 'MM月dd日', { locale: zhCN })}
             </div>
@@ -141,7 +141,7 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
                   <AlertDialogCancel>取消</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => deleteTask(task.id)}
-                    className="bg-red-600 hover:bg-red-700"
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
                   >
                     删除
                   </AlertDialogAction>
