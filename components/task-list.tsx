@@ -13,6 +13,7 @@ import { Search } from 'lucide-react'
 import { TaskItem } from './task-item'
 import { TaskForm } from './task-form'
 import { TaskListSkeleton } from './task-skeleton'
+import { AnimatedList } from './animated-list'
 import { Task, TaskStatus } from '@/types'
 import { useTaskStore } from '@/store/task-store'
 
@@ -93,7 +94,7 @@ export function TaskList() {
         </Select>
       </div>
 
-      <div className="space-y-3">
+      <AnimatedList className="space-y-3">
         {tasks.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             <p className="text-lg">暂无任务</p>
@@ -104,7 +105,7 @@ export function TaskList() {
             <TaskItem key={task.id} task={task} onEdit={handleEdit} />
           ))
         )}
-      </div>
+      </AnimatedList>
 
       <TaskForm
         task={editingTask}

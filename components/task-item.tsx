@@ -2,6 +2,7 @@
 
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
+import { motion } from 'framer-motion'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -43,11 +44,14 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
   }
 
   return (
-    <div
+    <motion.div
+      layout
       className={cn(
         'flex items-start gap-3 p-4 bg-card rounded-lg border border-border transition-all hover:shadow-md',
         task.status === 'done' && 'opacity-60'
       )}
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
     >
       <Checkbox
         checked={task.status === 'done'}
@@ -116,6 +120,6 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </motion.div>
   )
 }

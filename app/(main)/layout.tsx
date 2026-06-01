@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import { Sidebar } from '@/components/sidebar'
 import { useTaskStore } from '@/store/task-store'
 import { useSettingsStore } from '@/store/settings-store'
@@ -61,9 +62,14 @@ export default function MainLayout({
 
       {/* 主内容区 */}
       <main id="main-content" className="lg:ml-64">
-        <div className="p-4 lg:p-8 pt-16 lg:pt-8">
+        <motion.div
+          className="p-4 lg:p-8 pt-16 lg:pt-8"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
           {children}
-        </div>
+        </motion.div>
       </main>
     </div>
   )
