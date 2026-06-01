@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -37,7 +36,6 @@ const priorityLabels = {
 export function TaskItem({ task, onEdit }: TaskItemProps) {
   const updateTask = useTaskStore((state) => state.updateTask)
   const deleteTask = useTaskStore((state) => state.deleteTask)
-  const [isHovered, setIsHovered] = useState(false)
 
   const handleStatusChange = (checked: boolean) => {
     const newStatus: TaskStatus = checked ? 'done' : 'todo'
@@ -53,12 +51,9 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
   return (
     <div
       className={cn(
-        'flex items-start gap-3 p-4 bg-white rounded-lg border border-gray-200 transition-all',
-        task.status === 'done' && 'opacity-60',
-        isHovered && 'shadow-md'
+        'flex items-start gap-3 p-4 bg-white rounded-lg border border-gray-200 transition-all hover:shadow-md',
+        task.status === 'done' && 'opacity-60'
       )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <Checkbox
         checked={task.status === 'done'}
