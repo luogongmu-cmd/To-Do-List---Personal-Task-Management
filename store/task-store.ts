@@ -102,8 +102,14 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   deleteTag: (id) => {
     const tags = get().tags.filter((tag) => tag.id !== id)
+    // Also remove the tag from all tasks
+    const tasks = get().tasks.map((task) => ({
+      ...task,
+      tags: task.tags.filter((tag) => tag.id !== id),
+    }))
     storage.setTags(tags)
-    set({ tags })
+    storage.setTasks(tasks)
+    set({ tags, tasks })
   },
 
   setFilter: (filter) => {
