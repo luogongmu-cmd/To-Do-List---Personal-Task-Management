@@ -3,7 +3,6 @@
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { motion } from 'framer-motion'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,7 +11,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreHorizontal, Pencil, Trash2, Calendar } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { MoreHorizontal, Pencil, Trash2, Calendar, Check, ArrowUp, ArrowDown, Minus } from 'lucide-react'
 import { Task, TaskStatus } from '@/types'
 import { useTaskStore } from '@/store/task-store'
 import { cn } from '@/lib/utils'
@@ -34,12 +44,25 @@ const priorityLabels = {
   high: '高',
 }
 
+const PriorityIcon = ({ priority }: { priority: string }) => {
+  switch (priority) {
+    case 'high':
+      return <ArrowUp className="h-3 w-3" />
+    case 'medium':
+      return <Minus className="h-3 w-3" />
+    case 'low':
+      return <ArrowDown className="h-3 w-3" />
+    default:
+      return null
+  }
+}
+
 export function TaskItem({ task, onEdit }: TaskItemProps) {
   const updateTask = useTaskStore((state) => state.updateTask)
   const deleteTask = useTaskStore((state) => state.deleteTask)
 
-  const handleStatusChange = (checked: boolean) => {
-    const newStatus: TaskStatus = checked ? 'done' : 'todo'
+  const handleStatusChange = () => {
+    const newStatus: TaskStatus = task.status === 'done' ? 'todo' : 'done'
     updateTask(task.id, { status: newStatus })
   }
 
@@ -50,15 +73,28 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
         'flex items-start gap-3 p-4 bg-card rounded-lg border border-border transition-all hover:shadow-md',
         task.status === 'done' && 'opacity-60'
       )}
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
     >
-      <Checkbox
-        checked={task.status === 'done'}
-        onCheckedChange={handleStatusChange}
-        className="mt-1"
+      {/* 触控目标扩大到 44px */}
+      <button
+        type="button"
+        role="checkbox"
+        aria-checked={task.status === 'done'}
         aria-label={`标记 ${task.title} 为${task.status === 'done' ? '未完成' : '已完成'}`}
-      />
+        onClick={handleStatusChange}
+        className={cn(
+          'relative flex size-5 shrink-0 items-center justify-center rounded-[4px] border border-input transition-colors outline-none mt-0.5 cursor-pointer',
+          'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+          'before:absolute before:-inset-3 before:content-[""]',
+          task.status === 'done' && 'border-primary bg-primary text-primary-foreground'
+        )}
+      >
+        {task.status === 'done' && (
+          <Check className="size-3.5" />
+        )}
+      </button>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
@@ -70,7 +106,8 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
           >
             {task.title}
           </h3>
-          <Badge className={priorityColors[task.priority]}>
+          <Badge className={cn('gap-1', priorityColors[task.priority])}>
+            <PriorityIcon priority={task.priority} />
             {priorityLabels[task.priority]}
           </Badge>
         </div>
@@ -111,13 +148,33 @@ export function TaskItem({ task, onEdit }: TaskItemProps) {
             <Pencil className="mr-2 h-4 w-4" />
             编辑
           </DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => deleteTask(task.id)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            删除
-          </DropdownMenuItem>
+          <AlertDialog>
+            <AlertDialogTrigger
+              render={
+                <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  删除
+                </DropdownMenuItem>
+              }
+            />
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>确定要删除这个任务？</AlertDialogTitle>
+                <AlertDialogDescription>
+                  此操作不可恢复。任务 &quot;{task.title}&quot; 将被永久删除。
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>取消</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => deleteTask(task.id)}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
+                >
+                  删除
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </DropdownMenuContent>
       </DropdownMenu>
     </motion.div>

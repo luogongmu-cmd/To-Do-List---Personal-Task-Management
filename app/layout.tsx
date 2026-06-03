@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Todo App - 个人任务管理",
+  title: "待办事项 - 个人任务管理",
   description: "功能全面的个人任务管理应用",
 };
 

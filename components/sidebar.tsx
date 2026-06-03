@@ -39,7 +39,7 @@ export function Sidebar({ onClose }: SidebarProps) {
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-background border-r border-border p-4">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Todo App</h1>
+        <h1 className="text-2xl font-bold text-foreground">待办事项</h1>
         <Button
           variant="ghost"
           size="icon-sm"

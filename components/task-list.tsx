@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Select,
   SelectContent,
@@ -9,7 +9,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Search, ClipboardList, Plus } from 'lucide-react'
 import { TaskItem } from './task-item'
 import { TaskForm } from './task-form'
 import { TaskListSkeleton } from './task-skeleton'
@@ -21,6 +22,7 @@ export function TaskList() {
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [formOpen, setFormOpen] = useState(false)
 
+  const tasks = useTaskStore((state) => state.tasks)
   const filter = useTaskStore((state) => state.filter)
   const sort = useTaskStore((state) => state.sort)
   const isLoading = useTaskStore((state) => state.isLoading)
@@ -28,7 +30,7 @@ export function TaskList() {
   const setSort = useTaskStore((state) => state.setSort)
   const getFilteredTasks = useTaskStore((state) => state.getFilteredTasks)
 
-  const tasks = getFilteredTasks()
+  const filteredTasks = getFilteredTasks()
 
   const handleEdit = (task: Task) => {
     setEditingTask(task)
@@ -40,6 +42,23 @@ export function TaskList() {
     setFormOpen(false)
   }
 
+  const handleNewTask = () => {
+    setEditingTask(null)
+    setFormOpen(true)
+  }
+
+  // 键盘快捷键支持
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'n' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        handleNewTask()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   if (isLoading) {
     return <TaskListSkeleton count={5} />
   }
@@ -50,7 +69,7 @@ export function TaskList() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="搜索任务..."
+            placeholder="搜索任务... (Ctrl+N 新建)"
             aria-label="搜索任务"
             value={filter.search || ''}
             onChange={(e) =>
@@ -95,13 +114,20 @@ export function TaskList() {
       </div>
 
       <AnimatedList className="space-y-3">
-        {tasks.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">
-            <p className="text-lg">暂无任务</p>
-            <p className="text-sm">点击侧边栏的&quot;新建任务&quot;开始添加</p>
+        {filteredTasks.length === 0 ? (
+          <div className="text-center py-12">
+            <ClipboardList className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+            <p className="text-lg font-medium text-foreground mb-1">暂无任务</p>
+            <p className="text-sm text-muted-foreground mb-4">
+              点击下方按钮或按 Ctrl+N 开始添加你的第一个任务
+            </p>
+            <Button onClick={handleNewTask}>
+              <Plus className="mr-2 h-4 w-4" />
+              新建任务
+            </Button>
           </div>
         ) : (
-          tasks.map((task) => (
+          filteredTasks.map((task) => (
             <TaskItem key={task.id} task={task} onEdit={handleEdit} />
           ))
         )}

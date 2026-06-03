@@ -10,6 +10,7 @@
 - 数据统计：完成率、趋势图表
 - 搜索筛选：按状态、优先级、标签筛选
 - 响应式：支持桌面和移动端
+- 暗色/亮色主题切换
 
 ## 技术栈
 
@@ -18,8 +19,7 @@
 - **状态管理**: Zustand
 - **图表**: Recharts
 - **日历**: react-big-calendar
-- **数据库**: SQLite (Prisma ORM)
-- **认证**: NextAuth.js
+- **数据存储**: localStorage（纯客户端）
 
 ## 快速开始
 
@@ -37,12 +37,6 @@ npm install
 cp .env.example .env
 ```
 
-### 初始化数据库
-
-```bash
-npx prisma migrate dev
-```
-
 ### 启动开发服务器
 
 ```bash
@@ -51,20 +45,25 @@ npm run dev
 
 访问 http://localhost:3000
 
+### 构建生产版本
+
+```bash
+npm run build
+```
+
 ## 项目结构
 
 ```
 ├── app/              # Next.js 页面路由
-│   ├── (auth)/       # 认证相关页面
 │   └── (main)/       # 主应用页面
 │       ├── calendar/ # 日历视图
 │       ├── settings/ # 设置页面
 │       └── stats/    # 数据统计
 ├── components/       # React 组件
-├── lib/              # 工具函数和数据库客户端
+├── lib/              # 工具函数
 ├── store/            # Zustand 状态管理
-├── prisma/           # 数据库 Schema 和迁移
-└── types/            # TypeScript 类型定义
+├── types/            # TypeScript 类型定义
+└── tests/            # Playwright 测试
 ```
 
 ## 部署
